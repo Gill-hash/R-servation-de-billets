@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résultat</title>
+<style>
+body{font-family:Arial;background:#fffde7;margin:0;}
+header{background:#2e7d32;color:yellow;text-align:center;padding:15px;font-size:22px;}
+.container{width:80%;margin:20px auto;}
+.card{background:white;border:2px solid #2e7d32;border-radius:8px;padding:16px;}
+.error{color:red;font-weight:bold;}
+.ok{color:#2e7d32;font-weight:bold;}
+.small{font-size:12px;opacity:0.7;}
+</style>
+</head>
+<body>
+<header>🎟️ Système de réservation d'événements</header>
+
+<div class="container">
+  <div class="card">
+    <h2 style="margin-top:0;">Résultat</h2>
+
+    {% if booking.errors %}
+      <p class="error">Impossible de valider la réservation :</p>
+      <ul>
+        {% for err in booking.errors %}
+          <li>{{ err }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="ok">Réservation confirmée ✅</p>
+      <p><b>Événement :</b> {{ booking.event }}</p>
+      <p><b>Nom :</b> {{ booking.name }}</p>
+      <p><b>Email :</b> {{ booking.email }}</p>
+      <p><b>Places :</b> {{ booking.places }}</p>
+      <p><b>Paiement :</b> {{ booking.payment }}</p>
+    {% endif %}
+
+    <p class="small">(Fin du traitement serveur)</p>
+    <p><a href="/" style="display:inline-block;margin-top:10px;">Retour</a></p>
+  </div>
+</div>
+</body>
+</html>
+<table border="1">
+    {% for key, value in result.items() %}
+    <tr>
+        <th>{{ key }}</th>
+        <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+</table>

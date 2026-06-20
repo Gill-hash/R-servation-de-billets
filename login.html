@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion</title>
+  <style>
+    body { background:#0d0d0d; color:#fff; font-family: Arial; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; }
+    .box { background:#111; padding:30px; border-left:4px solid red; width:360px; }
+    input { width:100%; padding:10px; margin:10px 0; box-sizing:border-box; }
+    button { width:100%; padding:10px; background:#1e90ff; border:none; color:#fff; cursor:pointer; }
+    .error { color:red; margin:0 0 10px; }
+    .ok { color:#2e7d32; margin:0 0 10px; }
+    a { color:#1e90ff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2 style="margin-top:0; color:#1e90ff;">Connexion</h2>
+
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    {% if message %}<p class="ok">{{ message }}</p>{% endif %}
+
+    <form method="POST" action="/login">
+      <input type="text" name="username" placeholder="Utilisateur" required />
+      <input type="password" name="password" placeholder="Mot de passe" required />
+      <button type="submit">Se connecter</button>
+    </form>
+
+    <p style="margin-top:14px; font-size:12px; opacity:0.8;">
+      Admin par défaut : <b>admin</b> / <b>admin</b>
+    </p>
+    <p style="margin-top:10px; font-size:12px; opacity:0.8;">
+      <a href="/">Retour à la réservation</a>
+    </p>
+  </div>
+</body>
+</html>
+
