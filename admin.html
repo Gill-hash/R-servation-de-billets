@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Événements</title>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#0d0d0d; color:#fff; }
+    header { background:#001f3f; padding:16px; text-align:center; border-bottom:3px solid red; }
+    header h1 { margin:0; color:#1e90ff; font-size:20px; }
+    .wrap { width: 90%; margin: 20px auto; display:flex; gap: 20px; }
+    .panel { background:#111; padding:16px; border-left:4px solid red; flex: 1; }
+    .panel h2 { color:red; margin-top:0; }
+    input, select { width:100%; padding:10px; margin:8px 0; box-sizing:border-box; }
+    button { padding:10px 12px; background:#1e90ff; border:none; color:white; cursor:pointer; width:auto; }
+    button.danger { background:#b00020; }
+    table { width:100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border:1px solid #333; padding:10px; text-align:left; font-size: 13px; }
+    th { background:#0f0f0f; color:#1e90ff; }
+    .row { display:flex; gap:10px; }
+    .row button { flex: 0 0 auto; }
+    a { color:#1e90ff; text-decoration:none; }
+    .small { font-size: 12px; opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Admin - Gestion des événements</h1>
+  </header>
+
+  <div class="wrap">
+    <div class="panel">
+      <h2>Événement (ajouter/modifier)</h2>
+
+      {% if edit_event %}
+        <p class="small">Mode édition : <b>{{ edit_event.name }}</b></p>
+      {% else %}
+        <p class="small">Mode ajout : remplis le formulaire.</p>
+      {% endif %}
+
+      <form method="POST" action="/admin/events">
+        <input type="hidden" name="id" value="{{ edit_event.id if edit_event else '' }}" />
+        <label>Nom</label>
+        <input type="text" name="name" value="{{ edit_event.name if edit_event else '' }}" required />
+
+        <label>Prix</label>
+        <input type="number" name="price" min="0" step="1" value="{{ edit_event.price if edit_event else 0 }}" required />
+
+        <label>Places disponibles</label>
+        <input type="number" name="seats" min="1" step="1" value="{{ edit_event.seats if edit_event else 10 }}" required />
+
+        <div class="row" style="margin-top:10px;">
+          <button type="submit">Enregistrer</button>
+          {% if edit_event %}
+            <a href="/admin" style="padding:10px 12px; background:#333; display:inline-block;">Annuler</a>
+          {% endif %}
+        </div>
+      </form>
+
+      <hr style="border:0; border-top:1px solid #333; margin:16px 0;" />
+
+      <h2>Réservations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Événement</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Places</th>
+            <th>Paiement</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% if reservations %}
+          {% for r in reservations %}
+            <tr>
+              <td>{{ r.event }}</td>
+              <td>{{ r.name }}</td>
+              <td>{{ r.email }}</td>
+              <td>{{ r.places }}</td>
+              <td>{{ r.payment }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="5" class="small">Aucune réservation pour le moment.</td></tr>
+        {% endif %}
+        </tbody>
+      </table>
+
+      <p class="small" style="margin-top:12px;">Les données sont stockées en mémoire (sans base de données).</p>
+    </div>
+
+    <div class="panel">
+      <h2>Liste des événements</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Places</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in events %}
+            <tr>
+              <td>{{ e.name }}</td>
+              <td>{{ e.price }}</td>
+              <td>{{ e.seats }}</td>
+              <td>
+                <div class="row" style="gap:6px;">
+                  <form method="POST" action="/admin/events/delete" onsubmit="return confirm('Supprimer cet événement ?')" style="margin:0;">
+                    <input type="hidden" name="id" value="{{ e.id }}" />
+                    <button class="danger" type="submit">Supprimer</button>
+                  </form>
+                  <a href="/admin?edit_id={{ e.id }}" style="padding:10px 12px; background:#333; display:inline-block;">Modifier</a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <p class="small" style="margin-top:12px;">
+        <a href="/logout">Déconnexion</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+<label for="evenement">Choisissez un événement :</label>
+
+<select id="evenement" name="evenement">
+    <option value="">-- Sélectionnez un événement --</option>
+    <option value="sportif">Événement sportif</option>
+    <option value="estival">Événement estival</option>
+</select>
